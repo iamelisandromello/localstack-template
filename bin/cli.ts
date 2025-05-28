@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-// CLI Version: v0.4.1
+// CLI Version: v0.5.2
 
-import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { existsSync } from 'node:fs'
+import { execSync } from 'node:child_process'
 
 const [, , command, ...args] = process.argv
 
@@ -48,6 +49,18 @@ async function run() {
       break
     }
 
+    case 'check': {
+      const checkScript = resolve(__dirname, '../scripts/check-resources.js')
+      execSync(`node ${checkScript}`, { stdio: 'inherit', env: process.env })
+      break
+    }
+
+    case 'manage': {
+      const manageScript = resolve(__dirname, '../scripts/manage-resources.js')
+      execSync(`node ${manageScript}`, { stdio: 'inherit', env: process.env })
+      break
+    }
+
     case '--help':
     case '-h': {
       printHelp()
@@ -71,6 +84,12 @@ function printHelp() {
 
   ▶ provision <lambdaZip>
      Provisiona recursos no LocalStack com base no pacote ZIP informado.
+
+  ▶ check
+     Verifica os recursos provisionados no LocalStack.
+
+  ▶ manage
+     Exclui recursos do LocalStack de forma interativa via prompt.
 
   ▶ --help / -h
      Exibe esta ajuda.
