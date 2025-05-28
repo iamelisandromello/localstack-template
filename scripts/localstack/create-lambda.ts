@@ -5,7 +5,28 @@ import path from 'node:path'
 import { CreateFunctionCommand } from '@aws-sdk/client-lambda'
 
 const functionName = LAMBDA_NAME
-const zipFilePath = path.resolve(__dirname, '../../lambda.zip')
+
+const zipFilePathEnv = process.env.LAMBDA_ZIP
+
+if (!zipFilePathEnv) {
+  console.error('❌ Variável de ambiente LAMBDA_ZIP não definida.')
+  process.exit(1)
+}
+
+if (!fs.existsSync(zipFilePathEnv)) {
+  console.error(`❌ Arquivo não encontrado: ${zipFilePathEnv}`)
+  process.exit(1)
+}
+
+const zipFilePath: string = zipFilePathEnv
+
+console.log('🧩 Executando create-lambda.js')
+console.log('🧩 __dirname:', __dirname)
+console.log('🧩 process.cwd():', process.cwd())
+console.log(
+  '🧩 Esperado: create-lambda.js esteja em localstack-template/dist/scripts/localstack'
+)
+console.log('🧩 Lendo arquivo ZIP de:', zipFilePath)
 
 async function createLambda() {
   const zipBuffer = fs.readFileSync(zipFilePath)

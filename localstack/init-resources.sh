@@ -1,21 +1,31 @@
 #!/bin/bash
+# init-resources Version: v0.2
 
 echo "▶️ Inicializando recursos no LocalStack..."
 
-PROJECT_ROOT=$(git rev-parse --show-toplevel)
-echo "Projeto localizado em: $PROJECT_ROOT"
+# Logs úteis
+echo "🔍 Diretório atual (pwd): $(pwd)"
+echo "🔍 Caminho do script: $0"
+echo "🔍 Caminho absoluto do script: $(realpath "$0")"
+echo "🔍 Caminho do lambdaZip recebido: $1"
+
+# Diretório base do template
+TEMPLATE_ROOT=$(realpath "$(dirname "$0")/../..")
+echo "📦 Diretório base do localstack-template: $TEMPLATE_ROOT"
 
 USE_TS_NODE=false
 
-if [ -f "$PROJECT_ROOT/tsconfig.json" ] && [ -d "$PROJECT_ROOT/scripts/localstack" ] && ls "$PROJECT_ROOT/scripts/localstack"/*.ts >/dev/null 2>&1; then
+if [ -f "$TEMPLATE_ROOT/tsconfig.json" ] && [ -d "$TEMPLATE_ROOT/scripts/localstack" ] && ls "$TEMPLATE_ROOT/scripts/localstack"/*.ts >/dev/null 2>&1; then
   USE_TS_NODE=true
 fi
 
 run() {
   if [ "$USE_TS_NODE" = true ]; then
-    npx ts-node "$PROJECT_ROOT/scripts/localstack/$1.ts"
+    echo "🔧 Executando com ts-node: $1.ts"
+    npx ts-node "$TEMPLATE_ROOT/scripts/localstack/$1.ts"
   else
-    node "$PROJECT_ROOT/dist/scripts/localstack/$1.js"
+    echo "🔧 Executando com node: $1.js"
+    node "$TEMPLATE_ROOT/dist/scripts/localstack/$1.js"
   fi
 }
 

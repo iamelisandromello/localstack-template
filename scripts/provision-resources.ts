@@ -5,6 +5,11 @@ import { existsSync } from 'node:fs'
 export default async function provisionResources(lambdaZipPath: string) {
   const scriptPath = path.resolve(__dirname, '../localstack/init-resources.sh')
 
+  console.log('🧭 __dirname:', __dirname)
+  console.log('🧭 process.cwd():', process.cwd())
+  console.log('🧭 Resolvendo path para init-resources.sh:', scriptPath)
+  console.log('🧭 Lambda ZIP Path recebido:', lambdaZipPath)
+
   if (!existsSync(scriptPath)) {
     throw new Error(`Script init-resources.sh não encontrado em: ${scriptPath}`)
   }
@@ -12,8 +17,12 @@ export default async function provisionResources(lambdaZipPath: string) {
   console.log(`Executando init-resources.sh com lambdaZip: ${lambdaZipPath}`)
 
   return new Promise<void>((resolve, reject) => {
-    const child = spawn('bash', [scriptPath, lambdaZipPath], {
-      stdio: 'inherit'
+    const child = spawn('bash', [scriptPath], {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        LAMBDA_ZIP: lambdaZipPath
+      }
     })
 
     child.on('exit', (code) => {
