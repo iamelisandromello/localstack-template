@@ -1,21 +1,32 @@
 #!/bin/bash
-# init-resources Version: v0.2
+# init-resources Version: v0.3
 
 echo "▶️ Inicializando recursos no LocalStack..."
 
-# Logs úteis
+SCRIPT_PATH=$(realpath "$0")
+SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+
 echo "🔍 Diretório atual (pwd): $(pwd)"
 echo "🔍 Caminho do script: $0"
-echo "🔍 Caminho absoluto do script: $(realpath "$0")"
+echo "🔍 Caminho absoluto do script: $SCRIPT_PATH"
 echo "🔍 Caminho do lambdaZip recebido: $1"
+echo "🔍 Diretório do script: $SCRIPT_DIR"
 
-# Diretório base do template
-TEMPLATE_ROOT=$(realpath "$(dirname "$0")/../..")
+# Detectar se estamos rodando de dist/localstack ou localstack
+if [[ "$SCRIPT_DIR" == */dist/localstack ]]; then
+  TEMPLATE_ROOT=$(realpath "$SCRIPT_DIR/../..")
+elif [[ "$SCRIPT_DIR" == */localstack ]]; then
+  TEMPLATE_ROOT=$(realpath "$SCRIPT_DIR/..")
+else
+  echo "❌ Estrutura de diretórios inesperada. Abortando."
+  exit 1
+fi
+
 echo "📦 Diretório base do localstack-template: $TEMPLATE_ROOT"
 
-USE_TS_NODE=false
-
-if [ -f "$TEMPLATE_ROOT/tsconfig.json" ] && [ -d "$TEMPLATE_ROOT/scripts/localstack" ] && ls "$TEMPLATE_ROOT/scripts/localstack"/*.ts >/dev/null 2>&1; then
+if [[ "$SCRIPT_DIR" == */dist/localstack ]]; then
+  USE_TS_NODE=false
+else
   USE_TS_NODE=true
 fi
 
