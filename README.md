@@ -1,4 +1,4 @@
-# LocalStack Template CLI
+# SkeletonLocalStack
 
 ![Version](https://img.shields.io/badge/version-0.5.2-blue)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-green)
@@ -6,6 +6,8 @@
 ![Tested](https://img.shields.io/badge/tests-passing-brightgreen)
 
 > Template CLI para provisionamento, verificação, empacotamento e gerenciamento de recursos LocalStack.
+
+**Clean Architecture Template com suporte a LocalStack para gerenciamento de recursos AWS simulados.**
 
 ---
 
@@ -83,11 +85,117 @@ npm install -D localstack-template
 }
 ````
 
+---
+
+## 🛠️ Recursos suportados
+
+Este projeto permite disponibilizar recursos locais da AWS, para ambientes de desenvolvimento, utilizando o LocalStack. Possibilitando testar o fluxo de integração do código desenvolvido com os recursos AWS, sem a anecessidade do build para ambiente em cloud. Trazendo agilidade e dinamismo para o desenvolvimento de soluções que utilizem recursos AWS.
+
+| Tipo              | Descrição                                     |
+|-------------------|-----------------------------------------------|
+| `lambda`          | Funções AWS Lambda                            |
+| `sqs`             | Filas do Simple Queue Service                 |
+| `s3`              | Buckets do Simple Storage Service             |
+| `dynamodb`        | Tabelas do DynamoDB                           |
+| `apigateway`      | APIs REST do API Gateway                      |
+| `apigateway-route`| Rotas (resources) de uma API no API Gateway   |
+
+---
+
+## Manage Resources LocalStack CLI
+
+
+
+Este CLI permite a exclusão interativa de recursos AWS simulados no LocalStack, suportando múltiplas execuções sem reiniciar o script.
+
+---
+
+## ✨ Funcionalidades
+
+- Exclusão seletiva de recursos:
+  - Lambda Functions
+  - SQS Queues
+  - S3 Buckets
+  - DynamoDB Tables
+  - API Gateway (REST APIs)
+  - API Gateway Routes
+
+- Suporte a expressões regulares (regex)
+- Execução em loop: permite múltiplas operações sem reiniciar o CLI
+- Interface interativa via [Inquirer.js](https://www.npmjs.com/package/inquirer)
+
+---
+
+## ▶️ Uso
+
+Execute o script interativo:
+
+```bash
+npm run manage:local
+```
+
+Você verá um menu como este:
+
+```text
+? Qual recurso deseja excluir? (Use as setas)
+❯ lambda
+  sqs
+  s3
+  dynamodb
+  apigateway
+  apigateway-route
+  sair
+```
+
+Após a escolha, você será solicitado a fornecer um padrão (regex ou nome exato) para filtrar os recursos a excluir.
+
+### 🔁 Múltiplas execuções
+
+Ao final de cada operação, o script perguntará se deseja executar novamente. Você pode continuar excluindo recursos sem reiniciar o CLI.
+
+---
+
 ## 🧪 Testes
 ```bash
 npm run test
 ```
 
+## 🚀 Clonar Projeto
+
+clone o repositório e rode localmente:
+
+```bash
+git clone https://github.com/iamelisandromello/localstack-template.git
+cd localstack-template
+npm install
+```
+
+---
+
+## 🧪 Scripts Úteis
+
+- `npm run dev:local`: compila, empacota e provisiona as Lambdas no LocalStack
+- `npm run manage:local`: inicia o CLI interativo para gerenciamento de recursos
+- `npm run check:local`: lista recursos atualmente criados no LocalStack
+
+
+## ⚠️ Aviso
+
+Este CLI **apaga recursos**. Use com cautela, especialmente fora de ambientes de teste/LocalStack.
+
+---
+
+## 👤 Autor
+
+**Elisandro M Correa**  
+📧 iamelicorrea@gmail.com  
+🔗 [github.com/iamelisandromello/localstack-template](https://github.com/iamelisandromello/localstack-template)
+
+---
+
 ## 📝 Licença
-### MIT
+
+MIT
+### 
+
 
