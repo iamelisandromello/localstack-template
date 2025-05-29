@@ -50,6 +50,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@jest/globals": "^29.7.0",
+		"@types/archiver": "^6.0.3",
 		"@types/aws-lambda": "^8.10.149",
 		"@types/inquirer": "^9.0.8",
 		"@types/jest": "^29.5.14",
