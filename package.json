@@ -40,12 +40,12 @@
 		"build": "npm run clean && npm run build:ts && npm run copy:extras && chmod +x dist/bin/cli.js",
 		"build:ts": "tsc -p tsconfig-build.json",
 		"copy:extras": "mkdir -p dist/localstack && cp -r localstack/*.sh dist/localstack/",
-		"package": "ts-node --files scripts/package-lambda-run.ts",
-		"build:local": "npm run clean && tsc -p tsconfig-build.json && npm run package",
-		"dev:local": "npm run build:local && npm run provision && node -r ts-node/register --env-file=.env.localstack src/main/index.ts",
-		"check:local": "node --env-file=.env.localstack -r ts-node/register scripts/check-resources.ts",
-		"provision": "npm run build && npm run package && ts-node bin/cli.ts provision ./localstack/lambda.zip",
-		"manage:resources": "ts-node scripts/manage-resources.ts"
+		"package:local": "ts-node --files scripts/package-lambda-run.ts",
+		"provision:local": "ts-node bin/cli.ts provision ./localstack/lambda.zip",
+		"build:local": "npm run clean && tsc -p tsconfig-build.json && npm run package:local",
+		"dev:local": "npm run build:local && npm run provision:local",
+		"manage:local": "ts-node scripts/manage-resources.ts",
+		"check:local": "node --env-file=.env.localstack -r ts-node/register scripts/check-resources.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
