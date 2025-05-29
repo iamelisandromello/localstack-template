@@ -21,28 +21,27 @@
 │   ├── localstack/             
 │   └── scripts/                
 ├── localstack/                 
-│   ├── init-resources.sh       # Inicialização dos recursos do LoacalStack
+│   ├── init-resources.sh       # Inicialização dos recursos do LocalStack
 │   └── localstack-config.ts    # Configurações do Skeleton Local Stack
-├── scripts/                    # 
-│   ├── check-resources.ts      # Verifica os recursos disponíveis no localstack
-│   ├── manage-resources.ts     # Gerencia exclusão de recursos no localstack
+├── scripts/                    
+│   ├── check-resources.ts      # Verifica os recursos disponíveis no LocalStack
+│   ├── manage-resources.ts     # Gerencia exclusão de recursos no LocalStack
 │   ├── package-lambda.ts       # Encapsula o diretório dist do projeto consumer para o lambda.zip
 │   ├── provision-resources.ts  # Provisionamento dos recursos a partir do lambda.zip
-│   ├── resources-deleters.sh   # Exclui rescursos setados para exclusão
-│   ├── selectors.ts /          # Seletor de recursos a serem excluidos
-│   └── localstack              # Verifica os recursos disponíveis no localstack
-│     ├── aws-config.ts         # Variáveis e configurações AWS
-│     ├── create-api-gateway.ts # Cria recurso de API GAteway no LocalStack
-│     ├── create-dynamodb.ts    # Cria recurso de DynamoDB no LocalStack
-│     ├── create-lambda.ts      # Cria recurso de Lambda Function no LocalStack
-│     ├── create-s3.ts          # Cria recurso de bucket S3 no LocalStack
-│     └──  create-sqs.ts        # Cria recurso de queue SQS no LocalStack
+│   ├── resources-deleters.sh   # Exclui recursos setados para exclusão
+│   ├── selectors.ts /          # Seletor de recursos a serem excluídos
+│   └── localstack              # Scripts de criação de recursos AWS simulados
+│     ├── aws-config.ts         
+│     ├── create-api-gateway.ts 
+│     ├── create-dynamodb.ts    
+│     ├── create-lambda.ts      
+│     ├── create-s3.ts          
+│     └── create-sqs.ts         
 ├── tests/                      # Testes automatizados
 ├── docs/                       # Documentação do projeto
 ├── .vscode/                    # Configurações do VS Code
 ├── node_modules/               # Dependências do projeto
 ├── .env                        # Variáveis de ambiente
-├── .env                        # Variáveis de ambiente para o LocalStack
 ├── .env.example                # Exemplo de variáveis de ambiente
 ├── .editorconfig               # Configurações do editor
 ├── .gitignore                  # Arquivos ignorados pelo Git
@@ -89,7 +88,7 @@ npm install -D localstack-template
 
 ## 🛠️ Recursos suportados
 
-Este projeto permite disponibilizar recursos locais da AWS, para ambientes de desenvolvimento, utilizando o LocalStack. Possibilitando testar o fluxo de integração do código desenvolvido com os recursos AWS, sem a anecessidade do build para ambiente em cloud. Trazendo agilidade e dinamismo para o desenvolvimento de soluções que utilizem recursos AWS.
+Este projeto permite disponibilizar recursos locais da AWS, para ambientes de desenvolvimento, utilizando o LocalStack. Possibilitando testar o fluxo de integração do código desenvolvido com os recursos AWS, sem a necessidade do build para ambiente em cloud. Trazendo agilidade e dinamismo para o desenvolvimento de soluções que utilizem recursos AWS.
 
 | Tipo              | Descrição                                     |
 |-------------------|-----------------------------------------------|
@@ -102,9 +101,47 @@ Este projeto permite disponibilizar recursos locais da AWS, para ambientes de de
 
 ---
 
+## 🔍 Verificação interativa de recursos (`check-resources.ts`)
+
+O comando `check` permite listar os recursos existentes no LocalStack de forma **interativa** com suporte ao [Inquirer.js](https://www.npmjs.com/package/inquirer).
+
+### ▶️ Como funciona
+
+Ao rodar:
+
+```bash
+npm run check:local
+```
+
+Você verá um menu como este:
+
+```text
+? Qual recurso deseja visualizar? (Use as setas)
+❯ lambda
+  sqs
+  s3
+  dynamodb
+  apigateway
+  apigateway-route
+  sair
+```
+
+- ✅ Após escolher um tipo de recurso (ex: `sqs`), o script exibirá todos os recursos daquele tipo atualmente disponíveis no LocalStack.
+- 🔁 Ao final da exibição, você poderá escolher outro recurso para visualizar **sem reiniciar o script**.
+- ❌ A opção `sair` encerra a execução.
+
+### ✅ Recursos suportados
+
+- Lambda
+- SQS
+- S3
+- DynamoDB
+- API Gateway
+- Rotas do API Gateway
+
+---
+
 ## Manage Resources LocalStack CLI
-
-
 
 Este CLI permite a exclusão interativa de recursos AWS simulados no LocalStack, suportando múltiplas execuções sem reiniciar o script.
 
@@ -178,7 +215,6 @@ npm install
 - `npm run manage:local`: inicia o CLI interativo para gerenciamento de recursos
 - `npm run check:local`: lista recursos atualmente criados no LocalStack
 
-
 ## ⚠️ Aviso
 
 Este CLI **apaga recursos**. Use com cautela, especialmente fora de ambientes de teste/LocalStack.
@@ -196,6 +232,3 @@ Este CLI **apaga recursos**. Use com cautela, especialmente fora de ambientes de
 ## 📝 Licença
 
 MIT
-### 
-
-
