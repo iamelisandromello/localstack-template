@@ -1,3 +1,5 @@
+// Check Resources Version: v0.1.3
+import inquirer from 'inquirer'
 import { servicesToCheck } from '../localstack/localstack-config'
 import {
   checkS3,
@@ -11,22 +13,71 @@ import {
 } from './service-checkers'
 
 async function checkResources() {
-  console.log('🔍 Verificando recursos no LocalStack...')
+  console.log('🔍 Selecione o recurso do LocalStack para verificar:')
 
-  const checks: Array<Promise<void>> = []
+  // Monta as opções do menu com base nos serviços ativados
+  const choices = []
+  if (servicesToCheck.s3) choices.push('S3')
+  if (servicesToCheck.sqs) choices.push('SQS')
+  if (servicesToCheck.lambda) choices.push('Lambda')
+  if (servicesToCheck.apigateway) choices.push('API Gateway')
+  if (servicesToCheck.dynamodb) choices.push('DynamoDB')
+  if (servicesToCheck.cloudwatch) choices.push('CloudWatch')
+  if (servicesToCheck.sns) choices.push('SNS')
+  if (servicesToCheck.kinesis) choices.push('Kinesis')
 
-  if (servicesToCheck.s3) checks.push(checkS3())
-  if (servicesToCheck.sqs) checks.push(checkSQS())
-  if (servicesToCheck.lambda) checks.push(checkLambda())
-  if (servicesToCheck.apigateway) checks.push(checkAPIGateway())
-  if (servicesToCheck.dynamodb) checks.push(checkDynamoDB())
-  if (servicesToCheck.cloudwatch) checks.push(checkCloudWatch())
-  if (servicesToCheck.sns) checks.push(checkSNS())
-  if (servicesToCheck.kinesis) checks.push(checkKinesis())
+  choices.push(new inquirer.Separator())
+  choices.push('Sair')
 
-  await Promise.all(checks)
+  while (true) {
+    const answers = await inquirer.prompt<{ resource: string }>([
+      {
+        type: 'list',
+        name: 'resource',
+        message: 'Escolha um recurso para verificar:',
+        choices
+      }
+    ])
 
-  console.log('✅ Verificação concluída.')
+    if (answers.resource === 'Sair') {
+      console.log('👋 Saindo... Até a próxima!')
+      process.exit(0)
+    }
+
+    console.log(`\n🔍 Verificando recurso: ${answers.resource}\n`)
+
+    switch (answers.resource) {
+      case 'S3':
+        await checkS3()
+        break
+      case 'SQS':
+        await checkSQS()
+        break
+      case 'Lambda':
+        await checkLambda()
+        break
+      case 'API Gateway':
+        await checkAPIGateway()
+        break
+      case 'DynamoDB':
+        await checkDynamoDB()
+        break
+      case 'CloudWatch':
+        await checkCloudWatch()
+        break
+      case 'SNS':
+        await checkSNS()
+        break
+      case 'Kinesis':
+        await checkKinesis()
+        break
+      default:
+        console.log('Recurso inválido')
+        break
+    }
+
+    console.log('✅ Verificação concluída.\n')
+  }
 }
 
 checkResources().catch((err) => {
