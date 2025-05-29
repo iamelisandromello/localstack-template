@@ -1,3 +1,4 @@
+// Check Resources Version: v0.1.2
 import inquirer from 'inquirer'
 import { servicesToCheck } from '../localstack/localstack-config'
 import {
@@ -25,6 +26,9 @@ async function checkResources() {
   if (servicesToCheck.sns) choices.push('SNS')
   if (servicesToCheck.kinesis) choices.push('Kinesis')
 
+  choices.push(new inquirer.Separator())
+  choices.push('Sair')
+
   const answers = await inquirer.prompt<{ resource: string }>([
     {
       type: 'list',
@@ -33,6 +37,11 @@ async function checkResources() {
       choices
     }
   ])
+
+  if (answers.resource === 'Sair') {
+    console.log('👋 Saindo... Até a próxima!')
+    process.exit(0)
+  }
 
   console.log(`\n🔍 Verificando recurso: ${answers.resource}\n`)
 
